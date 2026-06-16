@@ -1,94 +1,341 @@
-import { useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+import hero1 from '../assets/photo-04-1.jpg';
+import hero2 from '../assets/photo-10a-1.jpg';
+import hero3 from '../assets/gabarit-photo-2.jpg';
+
+
+const slides = [
+  { id: 1, img: hero1, label: 'Home Cleaning' },
+  { id: 2, img: hero2, label: 'Office Cleaning' },
+  { id: 3, img: hero3, label: 'Deep Cleaning' },
+];
+
+const SLIDE_INTERVAL = 4000;
+const REVEAL_SCROLL_DISTANCE = 600; // px of scroll before SVG fully exits
 
 const Hero = () => {
-  const [sliderPos, setSliderPos] = useState<number>(50);
-  const cardRef = useRef<HTMLDivElement>(null);
-  const draggingRef = useRef<boolean>(false);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [svgOffset, setSvgOffset] = useState(0); // 0 = fully visible, 100 = fully off screen
+  const heroRef = useRef<HTMLDivElement>(null);
+  const ticking = useRef(false);
 
-  const getPercent = (clientX: number): number => {
-    if (!cardRef.current) return sliderPos;
-    const rect = cardRef.current.getBoundingClientRect();
-    const percent = ((clientX - rect.left) / rect.width) * 100;
-    return Math.max(0, Math.min(100, percent));
-  };
+  // ─── Carousel auto-advance
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % slides.length);
+    }, SLIDE_INTERVAL);
+    return () => clearInterval(timer);
+  }, []);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!draggingRef.current) return;
-    setSliderPos(getPercent(e.clientX));
-  };
+  // ─── Scroll-driven SVG reveal
+  useEffect(() => {
+    const handleScroll = () => {
+      if (ticking.current) return;
+      ticking.current = true;
 
-  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (!draggingRef.current) return;
-    setSliderPos(getPercent(e.touches[0].clientX));
-  };
+      requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        // Map scrollY 0→REVEAL_SCROLL_DISTANCE to svgOffset 0→100%
+        const progress = Math.min(scrollY / REVEAL_SCROLL_DISTANCE, 1);
+        setSvgOffset(progress * 110); // 110 so it fully exits
+        ticking.current = false;
+      });
+    };
 
-  const startDrag = () => { draggingRef.current = true; };
-  const endDrag = () => { draggingRef.current = false; };
-
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    setSliderPos(getPercent(e.clientX));
-  };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <section className="hero">
-      <div className="wrap hero-grid">
-        <div>
-          <span className="eyebrow">Lagos · Residential & Commercial</span>
-          <h1 className="display">
-            A cleaner space, a <span className="accent">greener</span> way of living.
-          </h1>
-          <p className="lead">
-            Clean Green brings trained, vetted cleaning teams and eco-conscious products
-            straight to your home or office — booked in minutes, done right every time.
-          </p>
-          <div className="hero-ctas">
-            <a href="#quote" className="btn btn-primary">Get a Free Quote</a>
-            <a href="tel:+2340000000000" className="btn btn-outline">Call Now</a>
-          </div>
-          <div className="trust-row">
-            <span><span className="dot"></span> Vetted & trained staff</span>
-            <span><span className="dot"></span> Eco-friendly products</span>
-            <span><span className="dot"></span> Same-week booking</span>
-          </div>
-        </div>
+    <>
+      <style>{`
+        .hero-root {
+          position: relative;
+          width: 100%;
+          height: 100vh;
+          overflow: hidden;
+        }
 
-        <div>
-          <div
-            className="reveal-card"
-            ref={cardRef}
-            onMouseMove={handleMouseMove}
-            onTouchMove={handleTouchMove}
-            onMouseUp={endDrag}
-            onTouchEnd={endDrag}
-            onMouseLeave={endDrag}
-            onClick={handleClick}
-          >
-            <div className="reveal-layer before">
-              <span className="reveal-tag">BEFORE</span>
-              <div className="reveal-caption">The Monday mess</div>
-              <div className="reveal-sub">Dust, clutter, a long week ahead</div>
-            </div>
+        /* ── Carousel ── */
+        .hero-carousel {
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+        }
+        .hero-slide {
+          position: absolute;
+          inset: 0;
+          opacity: 0;
+          transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hero-slide.active {
+          opacity: 1;
+        }
 
-            <div
-              className="reveal-layer after"
-              style={{ clipPath: `inset(0 0 0 ${sliderPos}%)` }}
+        /* ── SVG shape layer ── */
+        .hero-shape {
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          pointer-events: none;
+          will-change: transform;
+          transition: transform 0.05s linear;
+        }
+        .hero-shape svg {
+          width: 100%;
+          height: 100%;
+        }
+
+        /* ── Blend-mode heading ── */
+        .hero-content {
+          position: absolute;
+          inset: 0;
+          z-index: 2;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          padding: 0 clamp(24px, 5vw, 80px) clamp(40px, 8vh, 100px);
+          pointer-events: none;
+          mix-blend-mode: difference;
+          color: white;
+        }
+        .hero-eyebrow {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+          font-weight: 700;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          margin-bottom: 16px;
+          opacity: 0.9;
+        }
+        .hero-heading {
+          font-family: 'Fraunces', serif;
+          font-weight: 900;
+          font-optical-sizing: auto;
+          font-size: clamp(3rem, 8vw, 7.5rem);
+          line-height: 0.95;
+          letter-spacing: -0.03em;
+          margin: 0;
+          max-width: 14ch;
+        }
+        .hero-heading .break {
+          display: block;
+        }
+        .hero-heading .accent-word {
+          font-style: italic;
+          font-weight: 300;
+        }
+
+        /* ── Slide counter ── */
+        .hero-counter {
+          position: absolute;
+          bottom: clamp(40px, 8vh, 100px);
+          right: clamp(24px, 5vw, 80px);
+          z-index: 3;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 8px;
+          mix-blend-mode: difference;
+          color: white;
+        }
+        .hero-counter-track {
+          width: 1px;
+          height: 80px;
+          background: rgba(255,255,255,0.3);
+          position: relative;
+          overflow: hidden;
+        }
+        .hero-counter-fill {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 1px;
+          background: white;
+          transition: height 0.4s ease;
+        }
+        .hero-counter-label {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.78rem;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          writing-mode: vertical-rl;
+          opacity: 0.8;
+        }
+
+        /* ── Scroll hint ── */
+        .hero-scroll-hint {
+          position: absolute;
+          bottom: clamp(40px, 8vh, 100px);
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 3;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 8px;
+          mix-blend-mode: difference;
+          color: white;
+          opacity: 0.7;
+          animation: hintBounce 2s ease-in-out infinite;
+        }
+        .hero-scroll-hint span {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.72rem;
+          font-weight: 700;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+        }
+        .hero-scroll-arrow {
+          width: 1px;
+          height: 40px;
+          background: white;
+          transform-origin: top;
+        }
+        @keyframes hintBounce {
+          0%, 100% { transform: translateX(-50%) translateY(0); }
+          50% { transform: translateX(-50%) translateY(6px); }
+        }
+
+        /* ── Sticky scroll spacer ── */
+        .hero-spacer {
+          height: 600px; /* matches REVEAL_SCROLL_DISTANCE */
+        }
+
+        /* ── Sticky wrapper ── */
+        .hero-sticky {
+          position: sticky;
+          top: 0;
+          height: 100vh;
+          width: 100%;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .hero-slide { transition: none; }
+          .hero-shape { transition: none; }
+          .hero-scroll-hint { animation: none; }
+        }
+
+        @media (max-width: 768px) {
+          .hero-counter { display: none; }
+          .hero-scroll-hint { display: none; }
+        }
+      `}</style>
+
+      {/* Sticky scroll wrapper — spacer creates scroll room for the reveal */}
+      <div ref={heroRef} style={{ position: 'relative' }}>
+        <div className="hero-sticky">
+          <div className="hero-root">
+
+            {/* ── Layer 1: Image carousel ── */}
+            <div className="hero-carousel">
+  {slides.map((slide, i) => (
+    <div
+      key={slide.id}
+      className={`hero-slide${i === activeSlide ? ' active' : ''}`}
+      style={{
+        backgroundImage: `url(${slide.img})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    />
+  ))}
+</div>
+
+            {/* ── Layer 2: SVG shape with hole (slides up on scroll) ── */}
+             <div
+              className="hero-shape"
+              style={{ transform: `translateY(-${svgOffset}%)` }}
             >
-              <span className="reveal-tag">AFTER CLEAN GREEN</span>
-              <div className="reveal-caption">Spotless. Fresh. Done.</div>
-              <div className="reveal-sub">In one visit, by one trusted team</div>
+              {/* Your hole SVG — circle punched out of full rectangle via compound path */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="100%"
+                height="100%"
+                viewBox="0 0 1440 900"
+                preserveAspectRatio="xMidYMid slice"
+                fill="none"
+              >
+                <g clipPath="url(#clip0_662_4755)">
+                  <mask
+                    id="mask0_662_4755"
+                    style={{ maskType: 'alpha' } as React.CSSProperties}
+                    maskUnits="userSpaceOnUse"
+                    x="0"
+                    y="0"
+                    width="1440"
+                    height="900"
+                  >
+                    <path d="M1440 0H0V900H1440V0Z" fill="var(--cream, #FFF)" />
+                  </mask>
+                  <g mask="url(#mask0_662_4755)">
+                    {/*
+                      Compound path: full rectangle MINUS circle = hole effect.
+                      The circle at center 970,324 radius ~203px is the transparent window.
+                      Fill matches --cream so it blends with your page background.
+                    */}
+                    <path
+  d="M1440 900H0V0H1440V900ZM970 247C857.886 247 767 337.886 767 450C767 562.114 857.886 653 970 653C1082.11 653 1173 562.114 1173 450C1173 337.886 1082.11 247 970 247Z"
+  fill="var(--cream, #FFF)"
+/>
+                  </g>
+                </g>
+                <defs>
+                  <clipPath id="clip0_662_4755">
+                    <rect width="1440" height="900" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+            </div>
+ 
+            {/* ── Layer 3: Blend-mode heading ── */}
+            <div className="hero-content">
+              <p className="hero-eyebrow">Professional Cleaning Service in Lagos</p>
+              <h1 className="hero-heading">
+                <span className="break">Leave the</span>
+                <span className="break accent-word">cleaning to us.</span>
+                <span className="break">Own your day.</span>
+                
+              </h1>
             </div>
 
-            <div
-              className="slider-handle"
-              style={{ left: `${sliderPos}%` }}
-              onMouseDown={startDrag}
-              onTouchStart={startDrag}
-            ></div>
+            {/* ── Slide counter ── */}
+            <div className="hero-counter">
+              <span className="hero-counter-label">
+                {slides[activeSlide].label}
+              </span>
+              <div className="hero-counter-track">
+                <div
+                  className="hero-counter-fill"
+                  style={{ height: `${((activeSlide + 1) / slides.length) * 100}%` }}
+                />
+              </div>
+              <span style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: '0.78rem',
+                fontWeight: 700,
+                mixBlendMode: 'difference',
+                color: 'white'
+              }}>
+                {String(activeSlide + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
+              </span>
+            </div>
+
+            {/* ── Scroll hint ── */}
+            <div className="hero-scroll-hint">
+              <span>Scroll</span>
+              <div className="hero-scroll-arrow" />
+            </div>
+
           </div>
-          <p className="reveal-hint">Drag the handle to see the difference →</p>
         </div>
+
+        {/* Spacer creates scroll distance for the SVG reveal */}
+        <div className="hero-spacer" />
       </div>
-    </section>
+    </>
   );
 };
 

@@ -16,7 +16,6 @@ const Navbar = () => {
         <div className="nav-links">
           <a href="#services">Services</a>
           <a href="#why">Why Us</a>
-          <a href="#how">How It Works</a>
           <a href="#testimonials">Reviews</a>
           <a href="#quote">Contact</a>
         </div>
@@ -38,7 +37,6 @@ const Navbar = () => {
       <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
         <a href="#services" onClick={closeMenu}>Services</a>
         <a href="#why" onClick={closeMenu}>Why Us</a>
-        <a href="#how" onClick={closeMenu}>How It Works</a>
         <a href="#testimonials" onClick={closeMenu}>Reviews</a>
         <a href="#quote" className="btn btn-primary" style={{ width: 'fit-content' }} onClick={closeMenu}>
           Get a Quote
