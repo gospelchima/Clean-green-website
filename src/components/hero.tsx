@@ -239,10 +239,10 @@ const Hero = () => {
     );
   }
   .hero-content {
-    justify-content: flex-start;
+    justify-content: center;
     align-items: flex-start;
     text-align: left;
-    padding: 80px 24px 0;
+    padding: 0 24px;
   }
   .hero-heading {
     font-size: clamp(2.4rem, 9vw, 3.2rem);
