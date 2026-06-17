@@ -219,9 +219,41 @@ const Hero = () => {
         }
 
         @media (max-width: 768px) {
-          .hero-counter { display: none; }
-          .hero-scroll-hint { display: none; }
-        }
+  .hero-shape svg {
+    display: none;
+  }
+  .hero-shape::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #FFF;
+    -webkit-mask-image: radial-gradient(
+      circle 220px at 100% 50%,
+      transparent 100%,
+      black 100%
+    );
+    mask-image: radial-gradient(
+      circle 220px at 100% 50%,
+      transparent 100%,
+      black 100%
+    );
+  }
+  .hero-content {
+    justify-content: flex-start;
+    align-items: flex-start;
+    text-align: left;
+    padding: 80px 24px 0;
+  }
+  .hero-heading {
+    font-size: clamp(2.4rem, 9vw, 3.2rem);
+  }
+  .hero-counter {
+    display: none;
+  }
+  .hero-scroll-hint {
+    display: none;
+  }
+}
       `}</style>
 
       {/* Sticky scroll wrapper — spacer creates scroll room for the reveal */}
