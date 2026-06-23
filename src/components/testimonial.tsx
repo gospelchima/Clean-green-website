@@ -30,14 +30,15 @@ const Testimonials = () => {
   return (
     <section id="testimonials">
       <div className="wrap">
-        <div className="section-head">
+        <div className="section-head" data-aos="fade-up">
           <span className="eyebrow">Client feedback</span>
           <h2 className="display">What people are saying</h2>
         </div>
 
         <div className="testi-grid">
-          {testimonials.map((t) => (
-            <div className="testi-card" key={t.name}>
+          {testimonials.map((t, i) => (
+            <div className="testi-card" key={t.name}data-aos="zoom-in"
+  data-aos-delay={i * 100}>
               <div className="stars">★★★★★</div>
               <p className="quote">{t.quote}</p>
               <div className="testi-person">

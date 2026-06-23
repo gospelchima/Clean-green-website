@@ -1,3 +1,5 @@
+import logo from '../assets/logo.svg';
+
 const Footer = () => {
   return (
     <footer>
@@ -5,8 +7,8 @@ const Footer = () => {
         <div className="footer-grid">
           <div>
             <div className="footer-logo">
-              <span className="logo-mark">CG</span>
-              Clean Green
+              <img src={logo} alt="Clean Green Logo" />
+            
             </div>
             <p>Professional, eco-conscious cleaning services for homes and offices across Lagos.</p>
           </div>
@@ -16,7 +18,7 @@ const Footer = () => {
             <ul>
               <li><a href="#services">Services</a></li>
               <li><a href="#why">Why Us</a></li>
-              <li><a href="#how">How It Works</a></li>
+              <li><a href="/Cleangreen-Signature-Scope-of-Services.pdf" target="_blank" rel="noopener noreferrer">View our full scope of work</a></li>
               <li><a href="#quote">Get a Quote</a></li>
             </ul>
           </div>
@@ -24,8 +26,8 @@ const Footer = () => {
           <div>
             <h4>Contact</h4>
             <ul>
-              <li><a href="tel:+2340000000000">+234 000 000 0000</a></li>
-              <li><a href="mailto:hello@cleangreen.ng">hello@cleangreen.ng</a></li>
+              <li><a href="tel:+2348086883879">+234 808 688 3879</a></li>
+              <li><a href="mailto:cleangreensignature@gmail.com">cleangreensignature@gmail.com</a></li>
               <li>Lagos, Nigeria</li>
             </ul>
           </div>

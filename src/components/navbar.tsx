@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import logo from '../assets/logo.svg';
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
@@ -9,18 +9,17 @@ const Navbar = () => {
     <header>
       <nav>
         <div className="logo">
-          <span className="logo-mark">CG</span>
-          Clean Green
+          <img src={logo} alt="Clean Green Logo" />
         </div>
 
         <div className="nav-links">
-          <a href="#services">Services</a>
-          <a href="#why">Why Us</a>
-          <a href="#testimonials">Reviews</a>
-          <a href="#quote">Contact</a>
+          <a href="#services">SERVICES</a>
+          <a href="#why">ABOUT US</a>
+          <a href="#testimonials">REVIEWS</a>
+          <a href="#quote">CONTACT</a>
         </div>
 
-        <a href="#quote" className="btn btn-primary nav-cta">Get a Quote</a>
+        <a href="#quote" className="btn btn-primary nav-cta">GET A QUOTE</a>
 
         <button
           className="burger"
@@ -35,11 +34,11 @@ const Navbar = () => {
       </nav>
 
       <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
-        <a href="#services" onClick={closeMenu}>Services</a>
-        <a href="#why" onClick={closeMenu}>Why Us</a>
-        <a href="#testimonials" onClick={closeMenu}>Reviews</a>
+        <a href="#services" onClick={closeMenu}>SERVICES</a>
+        <a href="#why" onClick={closeMenu}>ABOUT US</a>
+        <a href="#testimonials" onClick={closeMenu}>REVIEWS</a>
         <a href="#quote" className="btn btn-primary" style={{ width: 'fit-content' }} onClick={closeMenu}>
-          Get a Quote
+          GET A QUOTE
         </a>
       </div>
     </header>

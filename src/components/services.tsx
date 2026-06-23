@@ -1,3 +1,5 @@
+
+
 interface Service {
   number: string;
   title: string;
@@ -40,22 +42,30 @@ const services: Service[] = [
 const Services = () => {
   return (
     <section id="services">
+      
       <div className="wrap">
-        <div className="section-head">
+        <div className="section-head" data-aos="fade-up">
           <span className="eyebrow">What we offer</span>
           <h2 className="display">Cleaning services for every space</h2>
           <p>From a quick weekly refresh to a full post-construction deep clean, our teams come fully equipped and ready to work.</p>
         </div>
 
         <div className="services-grid">
-          {services.map((service) => (
-            <div className="service-card" key={service.title}>
+          {services.map((service, i) => (
+            <div className="service-card" key={service.title} data-aos="fade-up"
+      data-aos-delay={i * 100}>
               <div className="service-num">{service.number}</div>
               <h3>{service.title}</h3>
               <p>{service.description}</p>
             </div>
           ))}
         </div>
+
+        <div className="services-cta">
+  <a href="/Cleangreen-Signature-Scope-of-Services.pdf" target="_blank" rel="noopener noreferrer" className="btn-outline">
+    View our full scope of work
+  </a>
+</div>
       </div>
     </section>
   );

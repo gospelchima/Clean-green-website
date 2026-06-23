@@ -1,13 +1,13 @@
 @import "tailwindcss";
-:root{
-    --green-deep:#1B3A2B;
-    --green-mid:#2F5C45;
-    --cream:#F7F4EC;
-    --lime:#C8E972;
-    --clay:#C4622D;
-    --ink:#22281F;
-    --line: rgba(34,40,31,0.12);
-  }
+:root {
+    --green-deep: #37326A;   /* deep purple — replaces dark anchor */
+    --green-mid: #425C99;    /* mid blue-purple — replaces mid green */
+    --cream: #F7F4EC;        /* keep — neutral background still works */
+    --lime: #13C0FF;         /* bright cyan — replaces lime as accent/CTA */
+    --clay: #00B9F9;         /* sky blue — replaces clay as secondary accent */
+    --ink: #22281F;          /* keep — dark text, still fine */
+    --line: rgba(34,40,31,0.12); /* keep */
+}
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
 body{
@@ -17,7 +17,10 @@ body{
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
 }
-  
+  /* ---------- paralax effect---------- */  
+[data-aos="fade-up"] {
+  transform: translateY(40px);
+}
   .display{
   font-family:'Playfair Display','Inter',serif;
   font-weight:900;
@@ -25,7 +28,7 @@ body{
   line-height:1.05;
   letter-spacing:-0.01em;
 }
-  .wrap{max-width:1160px;margin:0 auto;padding:0 24px;}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 24px;}
  
   /* ---------- NAV ---------- */
   header{
@@ -36,7 +39,7 @@ body{
 }
   nav{
     display:flex;align-items:center;justify-content:space-between;
-    padding:18px 24px; max-width:1160px; margin:0 auto;
+    padding:18px 24px; max-width:1280px; margin:0 auto;
   }
   .logo{
     display:flex; align-items:center; gap:10px;
@@ -44,6 +47,10 @@ body{
     font-size:1.25rem; letter-spacing:-0.02em;
     color:var(--green-deep);
   }
+  .logo img {
+  height: 80px; /* control size here */
+  width: auto;
+}
   .logo-mark{
     width:30px;height:30px;border-radius:8px;
     background:var(--green-deep);
@@ -53,7 +60,7 @@ body{
   }
   .nav-links{display:flex;gap:32px;align-items:center;}
   .nav-links a{
-    color:var(--ink); text-decoration:none; font-weight:600; font-size:0.95rem;
+    color:var(--green-deep); text-decoration:none; font-weight:600; font-size:0.95rem;
     opacity:0.75; transition:opacity .2s;
   }
   .nav-links a:hover{opacity:1;}
@@ -200,6 +207,32 @@ body{
   }
   .service-card h3{font-size:1.25rem; color:var(--green-deep); margin-bottom:10px;}
   .service-card p{font-size:0.95rem; opacity:0.75;}
+
+  .services-cta {
+  margin-top: 48px;
+  text-align: center;
+  
+}
+
+.btn-outline {
+  display: inline-block;
+  padding: 14px 32px;
+  border: 1.5px solid #37326A;
+  color: #37326A;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background 0.2s, color 0.2s;
+  border-radius:999px;
+}
+
+.btn-outline:hover {
+  background: #37326A;
+  color: var(--cream);
+}
  
   /* ---------- WHY US ---------- */
   .why-grid{
@@ -331,3 +364,7 @@ body{
   @media (prefers-reduced-motion: reduce){
     *{transition:none !important; scroll-behavior:auto !important;}
   }
+
+  .footer-logo img {
+  mix-blend-mode: plus-lighter;
+}

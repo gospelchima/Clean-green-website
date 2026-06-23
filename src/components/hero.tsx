@@ -94,11 +94,11 @@ const Hero = () => {
           z-index: 2;
           display: flex;
           flex-direction: column;
-          justify-content: flex-end;
+          justify-content: center;
           padding: 0 clamp(24px, 5vw, 80px) clamp(40px, 8vh, 100px);
           pointer-events: none;
           mix-blend-mode: difference;
-          color: white;
+          color: #C8CD95;
         }
         .hero-eyebrow {
           font-family: 'Space Grotesk', sans-serif;
@@ -138,12 +138,12 @@ const Hero = () => {
           align-items: flex-end;
           gap: 8px;
           mix-blend-mode: difference;
-          color: white;
+          color: #C8CD95;
         }
         .hero-counter-track {
           width: 1px;
           height: 80px;
-          background: rgba(255,255,255,0.3);
+          background: rgba(200, 205, 149, 0.3);
           position: relative;
           overflow: hidden;
         }
@@ -152,7 +152,7 @@ const Hero = () => {
           top: 0;
           left: 0;
           width: 1px;
-          background: white;
+          background: #C8CD95;
           transition: height 0.4s ease;
         }
         .hero-counter-label {
@@ -163,6 +163,7 @@ const Hero = () => {
           text-transform: uppercase;
           writing-mode: vertical-rl;
           opacity: 0.8;
+          color: #C8CD95;
         }
 
         /* ── Scroll hint ── */
@@ -177,7 +178,7 @@ const Hero = () => {
           align-items: center;
           gap: 8px;
           mix-blend-mode: difference;
-          color: white;
+          color: #C8CD95;
           opacity: 0.7;
           animation: hintBounce 2s ease-in-out infinite;
         }
@@ -191,7 +192,7 @@ const Hero = () => {
         .hero-scroll-arrow {
           width: 1px;
           height: 40px;
-          background: white;
+          background: #C8CD95;
           transform-origin: top;
         }
         @keyframes hintBounce {
@@ -226,7 +227,7 @@ const Hero = () => {
     content: '';
     position: absolute;
     inset: 0;
-    background: #FFF;
+    background: #C8CD95;
     -webkit-mask-image: radial-gradient(
       circle 220px at 100% 50%,
       transparent 100%,
@@ -309,7 +310,7 @@ const Hero = () => {
                       Fill matches --cream so it blends with your page background.
                     */}
                     <path
-  d="M1440 900H0V0H1440V900ZM970 247C857.886 247 767 337.886 767 450C767 562.114 857.886 653 970 653C1082.11 653 1173 562.114 1173 450C1173 337.886 1082.11 247 970 247Z"
+  d="M1440 900H0V0H1440V900ZM1030 247C917.886 247 827 337.886 827 450C827 562.114 917.886 653 1030 653C1142.11 653 1233 562.114 1233 450C1233 337.886 1142.11 247 1030 247Z"
   fill="var(--cream, #FFF)"
 />
                   </g>
@@ -326,9 +327,9 @@ const Hero = () => {
             <div className="hero-content">
               <p className="hero-eyebrow">Professional Cleaning Service in Lagos</p>
               <h1 className="hero-heading">
-                <span className="break">Leave the</span>
-                <span className="break accent-word">cleaning to us.</span>
-                <span className="break">Own your day.</span>
+                <span className="break">A Clean Space,</span>
+                <span className="break accent-word">A Better Life.</span>
+                
                 
               </h1>
             </div>
