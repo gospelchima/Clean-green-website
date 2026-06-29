@@ -12,7 +12,8 @@ const slides = [
 ];
 
 const SLIDE_INTERVAL = 4000;
-const REVEAL_SCROLL_DISTANCE = 600; // px of scroll before SVG fully exits
+const DESKTOP_REVEAL_SCROLL_DISTANCE = 600; // px of scroll before SVG fully exits
+const MOBILE_REVEAL_SCROLL_DISTANCE = 340;
 
 const Hero = () => {
   const [activeSlide, setActiveSlide] = useState(0);
@@ -36,8 +37,11 @@ const Hero = () => {
 
       requestAnimationFrame(() => {
         const scrollY = window.scrollY;
-        // Map scrollY 0→REVEAL_SCROLL_DISTANCE to svgOffset 0→100%
-        const progress = Math.min(scrollY / REVEAL_SCROLL_DISTANCE, 1);
+        const revealDistance =
+          window.matchMedia('(max-width: 768px)').matches
+            ? MOBILE_REVEAL_SCROLL_DISTANCE
+            : DESKTOP_REVEAL_SCROLL_DISTANCE;
+        const progress = Math.min(scrollY / revealDistance, 1);
         setSvgOffset(progress * 110); // 110 so it fully exits
         ticking.current = false;
       });
@@ -202,7 +206,7 @@ const Hero = () => {
 
         /* ── Sticky scroll spacer ── */
         .hero-spacer {
-          height: 600px; /* matches REVEAL_SCROLL_DISTANCE */
+          height: 600px;
         }
 
         /* ── Sticky wrapper ── */
@@ -220,6 +224,11 @@ const Hero = () => {
         }
 
         @media (max-width: 768px) {
+  .hero-root,
+  .hero-sticky {
+    height: 100svh;
+    min-height: 620px;
+  }
   .hero-shape svg {
     display: none;
   }
@@ -227,7 +236,7 @@ const Hero = () => {
     content: '';
     position: absolute;
     inset: 0;
-    background: #C8CD95;
+    background: var(--cream, #F7F4EC);
     -webkit-mask-image: radial-gradient(
       circle 220px at 100% 50%,
       transparent 100%,
@@ -243,16 +252,29 @@ const Hero = () => {
     justify-content: center;
     align-items: flex-start;
     text-align: left;
-    padding: 0 24px;
+    padding: 88px 24px 72px;
+    mix-blend-mode: normal;
+    color: var(--green-deep, #37326A);
+  }
+  .hero-eyebrow {
+    font-size: 0.82rem;
+    line-height: 1.35;
+    max-width: 24ch;
+    margin-bottom: 18px;
   }
   .hero-heading {
-    font-size: clamp(2.4rem, 9vw, 3.2rem);
+    font-size: clamp(3.35rem, 16vw, 5rem);
+    line-height: 0.9;
+    max-width: 9ch;
   }
   .hero-counter {
     display: none;
   }
   .hero-scroll-hint {
     display: none;
+  }
+  .hero-spacer {
+    height: ${MOBILE_REVEAL_SCROLL_DISTANCE}px;
   }
 }
       `}</style>
