@@ -6,10 +6,10 @@ const Footer = () => {
       <div className="wrap">
         <div className="footer-grid">
           <div>
-            <div className="footer-logo">
+            <a href="#" className="footer-logo" aria-label="Clean Green home">
               <img src={logo} alt="Clean Green Logo" />
             
-            </div>
+            </a>
             <p>Professional, eco-conscious cleaning services for homes and offices across Lagos.</p>
           </div>
 

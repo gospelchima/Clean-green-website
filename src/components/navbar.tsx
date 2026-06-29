@@ -8,9 +8,9 @@ const Navbar = () => {
   return (
     <header>
       <nav>
-        <div className="logo">
+        <a href="#" className="logo" aria-label="Clean Green home">
           <img src={logo} alt="Clean Green Logo" />
-        </div>
+        </a>
 
         <div className="nav-links">
           <a href="#services">SERVICES</a>
